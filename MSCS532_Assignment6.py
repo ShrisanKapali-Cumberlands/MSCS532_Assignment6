@@ -90,7 +90,6 @@ sizes = [
     700000,
     800000,
 ]
-
 distributions = ["Sorted", "Reverse_Sorted", "Random"]
 
 # Creating a list to store the execution time for each sort
@@ -205,8 +204,16 @@ class Array:
 print("\n\n************************************")
 print("Test cases for Array")
 print("Initializing an empty array of size 10")
+start = time.time()
 array = Array(10)
-print("Array initialize of size 10. Current array size = ", array.size)
+end = time.time()
+executionTime = end - start
+
+print(
+    "Array initialize of size 10. Current array size = ",
+    array.size,
+)
+print("Execution time to initialize in seconds = ", executionTime)
 print("Current value of index 0 : Expected : None | Actual :", array.access(0))
 
 # Adding elements into array, and accessing their value
