@@ -11,3 +11,7 @@ To run the program, on the terminal run the following command
 ```
 py MSCS532_Assignment6.py
 ```
+
+### Median-of-Medians vs QuickSelect
+
+While finding the 50th element using these deterministic and randomized algorithms, we can observe that the randomized quickselect performs better.
