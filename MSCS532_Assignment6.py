@@ -76,3 +76,95 @@ def randomized_select(array, low, high, k):
         return randomized_select(array, low, pivot_index - 1, k)
     else:
         return randomized_select(array, pivot_index + 1, high, k)
+
+
+# Test cases of different array sizes and distributions
+# Setting up the sizes
+sizes = [
+    100000,
+    200000,
+    300000,
+    400000,
+    500000,
+    600000,
+    700000,
+    800000,
+]
+distributions = ["Sorted", "Reverse_Sorted", "Random"]
+
+# Creating a list to store the execution time for each sort
+executionTimeDeterministic = {dist: [] for dist in distributions}
+executionTimeRandomized = {dist: [] for dist in distributions}
+
+
+# Looping through all the sizes
+for size in sizes:
+    # For each distribution generate the data sets
+    for dist in distributions:
+        if "Sorted" == dist:
+            data = list(range(size))
+        elif "Reverse_Sorted" == dist:
+            data = list(range(size, 0, -1))
+        elif "Random" == dist:
+            data = random.sample(range(size), size)
+
+        # Finding the kth element
+        k = 50
+
+        # Perform Deterministic quick sort
+        start = time.time()
+        print(f"The {k}th element is ", median_of_medians(data.copy(), k))
+        end = time.time()
+        executionTimeDeterministic[dist].append(end - start)
+        print(
+            f"Execution time of deterministic median-of-median sort for finding {k} th element in "
+            + dist
+            + " array of size "
+            + str(size)
+            + " took "
+            + str(end - start)
+            + " seconds"
+        )
+
+        # Perform Randomized quick select
+        start = time.time()
+        print(
+            f"The {k}th element is ",
+            randomized_select(data.copy(), 0, len(data) - 1, k),
+        )
+        end = time.time()
+        executionTimeRandomized[dist].append(end - start)
+        print(
+            f"Execution time of randomized quickselect sort for finding {k} th element in "
+            + dist
+            + " array of size "
+            + str(size)
+            + " took "
+            + str(end - start)
+            + " seconds"
+        )
+        print("")
+
+
+# Using matplot library to plot the graph of the execution time
+plt.figure(figsize=(10, 6))
+for dist in distributions:
+    plt.plot(
+        sizes,
+        executionTimeDeterministic[dist],
+        label=f"Deterministic Median-Of-Median - {dist}",
+        linestyle="--",
+    )
+    plt.plot(
+        sizes,
+        executionTimeRandomized[dist],
+        label=f"Randomized QuickSelect - {dist}",
+        linestyle="-",
+    )
+
+plt.xlabel("Input Size")
+plt.ylabel("Time (seconds)")
+plt.title("Deterministic vs Randomized Selection sort to fing 50th element Performance")
+plt.legend()
+plt.grid()
+plt.show()
