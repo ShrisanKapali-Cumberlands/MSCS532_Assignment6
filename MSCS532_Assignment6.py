@@ -22,13 +22,57 @@ def median_of_medians(array, k):
     else:
         pivot = median_of_medians(medians, len(medians) // 2)
 
-    # Partitioning left and right
+    # Partitioning
     lows = [x for x in array if x < pivot]
     highs = [x for x in array if x > pivot]
 
+    # If the kth smallest is in lows
     if k < len(lows):
         return median_of_medians(lows, k)
+
+    # If the kth smallest is in higs
     elif k > len(lows):
         return median_of_medians(highs, k - len(lows) - 1)
+
+    # If the pivot is the kth smallest
     else:
         return pivot
+
+
+# Randomized Quickselect
+def partition(array, low, high):
+    # Select the high as the pivot
+    pivot = array[high]
+    i = low - 1
+
+    for j in range(low, high):
+        # if array at index j is less than pivot, increment
+        if array[j] <= pivot:
+            i += 1
+            array[i], array[j] = array[j], array[i]
+
+    array[i + 1], array[high] = array[high], array[i + 1]
+    return i + 1
+
+
+def randomized_partition(array, low, high):
+    # select a random pivot between low and high and swap with las element
+    pivot_index = random.randint(low, high)
+    array[pivot_index], array[high] = array[high], array[pivot_index]
+    return partition(array, low, high)
+
+
+# Finally a function for randomized quickselect to find kth element
+def randomized_select(array, low, high, k):
+    if low == high:
+        return array[low]
+
+    pivot_index = randomized_partition(array, low, high)
+
+    # the kth element is at pivot
+    if k == pivot_index:
+        return array[k]
+    elif k < pivot_index:
+        return randomized_select(array, low, pivot_index - 1, k)
+    else:
+        return randomized_select(array, pivot_index + 1, high, k)
